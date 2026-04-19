@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Urban Growth Modeling Dashboard</title>
+    <!-- Import a modern Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS Variables for a Clean, Modern Theme --- */
+        :root {
+            --primary-color: #4f46e5;      /* Indigo */
+            --primary-light: #818cf8;
+            --background: #f8fafc;         /* Very light gray/blue */
+            --card-bg: #ffffff;
+            --text-main: #1e293b;          /* Slate 800 */
+            --text-muted: #64748b;         /* Slate 500 */
+            --border-color: #e2e8f0;       /* Slate 200 */
+            --highlight: #10b981;          /* Emerald */
+        }
+
+        /* --- Global Resets & Base Styles --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 0 0 40px 0;
+            /* Smooth fade-in animation for the whole page */
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Header Styling with Gradient --- */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* --- Main Container --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- Sections & Cards --- */
+        section {
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Subtle hover effect for cards to make it dynamic */
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        /* --- Charts Grid --- */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .chart-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-card h3 {
+            margin-bottom: 15px;
+            color: var(--text-main);
+            font-size: 1.2rem;
+        }
+
+        .chart-card img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            /* Zoom slightly on hover */
+            transition: transform 0.3s ease;
+        }
+
+        .chart-card img:hover {
+            transform: scale(1.02);
+        }
+
+        /* --- Table Styling --- */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        /* Highlight the Tech Park row */
+        tr.highlight-row {
+            background-color: #ecfdf5; /* Light emerald background */
+            font-weight: 600;
+            color: #065f46;
+        }
+
+        tr:hover:not(.highlight-row) {
+            background-color: #f8fafc;
+        }
+
+        /* --- Conclusion Highlight Box --- */
+        .conclusion-box {
+            background: linear-gradient(to right, #ecfdf5, #d1fae5);
+            border-left: 6px solid var(--highlight);
+            padding: 25px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .conclusion-box p {
+            color: #065f46;
+            font-size: 1.15rem;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Predictive Urban Growth Modeling Dashboard</h1>
+        <p>Analyzing and forecasting real estate trends to find high-growth investment opportunities.</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- 1. Project Description -->
+        <section class="card">
+            <h2>Project Description</h2>
+            <p>Welcome to our interactive data analytics dashboard. This project analyzes historical real estate data (2018-2023) across various urban locations, evaluating key metrics like pricing trends and buyer demand.</p>
+            <p>Using simple machine learning (Linear Regression), we have projected these historical trends into the future to identify which neighborhoods hold the highest growth potential for investors by the year 2025.</p>
+        </section>
+
+        <!-- 2. Visualizations -->
+        <section>
+            <h2>Data Visualizations</h2>
+            <div class="charts-grid">
+                
+                <!-- Chart 1 -->
+                <div class="card chart-card">
+                    <h3>Price Trends Over Time</h3>
+                    <img src="price_trends_linegraph.png" alt="Line graph showing price trends from 2018 to 2023">
+                </div>
+                
+                <!-- Chart 2 -->
+                <div class="card chart-card">
+                    <h3>Overall Price Growth (%)</h3>
+                    <img src="price_growth_barchart.png" alt="Bar chart showing percentage growth by location">
+                </div>
+                
+                <!-- Chart 3 -->
+                <div class="card chart-card">
+                    <h3>Demand Heatmap</h3>
+                    <img src="demand_heatmap.png" alt="Heatmap showing demand concentration over the years">
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 3. Predictions Table -->
+        <section class="card">
+            <h2>Future Predictions (Estimated Price for 2025)</h2>
+            <p>Based on our Linear Regression model, here are the projected average real estate prices for the year 2025 across all locations.</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Location</th>
+                            <th>Predicted Price (2025)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Downtown</td>
+                            <td>$636,666</td>
+                        </tr>
+                        <tr>
+                            <td>Suburb A</td>
+                            <td>$492,238</td>
+                        </tr>
+                        <tr>
+                            <td>Suburb B</td>
+                            <td>$303,238</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td>Tech Park 🚀</td>
+                            <td>$924,476</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 4. Conclusion -->
+        <section class="card">
+            <h2>Conclusion</h2>
+            <div class="conclusion-box">
+                <p><strong>Investment Recommendation:</strong> Our analysis highlights <strong>Tech Park</strong> as the area with the highest growth potential. It has demonstrated an impressive 100% price growth from 2018 to 2023, driven by consistently surging demand. Our predictive model estimates prices in Tech Park will climb to nearly $925,000 by 2025, making it the prime target for future real estate investments.</p>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
